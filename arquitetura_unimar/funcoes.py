@@ -1,20 +1,4 @@
-def cria_arquivo_usuarios():
-
-    """Carrega o estoque a partir de um arquivo de texto."""
-    usuarios = {}
-    try:
-        with open('usuarios.txt', 'r') as arquivo:
-            for linha in arquivo:
-                linha = linha.strip()
-                if linha:
-                    nome, quantidade = linha.split(', ')
-                    usuarios[cep] = int(telefone)                    
-    except FileNotFoundError:
-        print("Arquivo de estoque não encontrado. Um novo será criado.")
-    except ValueError:
-      print("Arquivo aberto, vamos começar.")
-    return usuarios
-
+from unidecode import unidecode
 
 def menu():
   soma_final= []
@@ -22,19 +6,9 @@ def menu():
 
 Precisarei de algumas informações para computar e verificar se é válida sua inscrição
 """)
-# def converter_cep(cep):
-#   while True:
-#     cep = input("")
-#     if len(cep) < 8 or len(cep) > 8:
-#       print("CEP invalido, Tente Novamente")
-#     else:
-#       break
-#   i = 0
-#   for number in cep:
-#     if i == 2 or i == 5:
-#       print(number + '.',end = "")
-#   i += 1
+
 def converter_cpf(cpf1):
+  cpf_convertido = []
   while True:
     cpf1 = input("")
     if len(cpf1) < 11 or len(cpf1) > 11:
@@ -44,66 +18,103 @@ def converter_cpf(cpf1):
   i = 0
   for number in cpf1:
     if i == 2 or i == 5:
-      print(number + '.',end = "")
-    elif i == 8:
-      print(number + '-',end = "")
-      i += 1
+      cpf_convertido.append(number)
+      cpf_convertido.append('.')
+    elif i == 8: 
+      cpf_convertido.append(number)
+      cpf_convertido.append('-')
+    else:
+      cpf_convertido.append(number)
+    i += 1
+    cpf_convertido = ''.join(cpf_convertido)
+    return cpf_convertido
 
 def genero():
   while True:
     print("Qual seu sexo biologico? ")
     sexo = input("(F/M) ").lower()
     if sexo == "f" or sexo == "m":
-      break
+      return sexo
     else:
       print("Não entendi, Tente Novamente")
+
 def nome():
-  print("Preciso de seu nome completo: ")
-  nome2 = input("")
   print("")
+  print("Preciso de seu nome completo: ")
+  while True:
+    nome2 = input("")
+    if valida_vazio(nome2):
+      print("Por favor, Digite seu nome")
+    else:
+      
+      return nome2
+    
+  
+
 def idade():
+  print("")
   print("Agora por favor sua idade: ")
   while True:
      try:
        idade1 = int(input("Exemplo:(18) "))
        if idade1 < 15 or idade1 > 100:
          raise ValueError()
-       break
+       return idade1
      except ValueError:
       print("Seu numero não foi validado, verifique se tem a idade minima necessaria para fazer o vestibular")
+
 def raca():
   print("")
   print("Por favor, me informe sua raça")
   while True:
-    raca1 = input("(Negro/Branco/Amarelo/Indigena)").lower()
-    if raca1 == "negro":
-      break
-    if raca1 == "branco":
-      break
-    if raca1 == "amarelo":
-      break
-    if raca1 == "indigena":
-      break
+    racas  = ["negro", "branco", "amarelo", "indigena"]
+    raca1 = unidecode(input("(Negro/Branco/Amarelo/Indigena)").lower())
+    if raca1 in racas:
+      return raca1
     else:
       print("Não entendi, Tente novamente")
+
 def cpf():
   print("")
   print("Legal, Agora preciso de seu CPF")
   converter_cpf(cpf)
+  print("")
 
 def endereço():
   print("Agora, preciso de seu endereço""")
-  endereço1 =  input("Exemplo: Av: Higino Muzi filho ")
+  while True:
+    endereço1 = input("Exemplo: Av: Higino Muzi filho ")
+    if valida_vazio(endereço1):
+      print("Não entendi, Tente novamente")
+    else:
+      break
   numero_endereço = (input("Numero: "))
+  while True:
+    if valida_vazio(numero_endereço):
+      print("Não entendi, Tente novamente")
+    else:
+      break
+
+def converter_cep(cep):
+  cep_convertido = []
+  while True:
+    cep = input("")
+    if len(cep) < 8 or len(cep) > 8:
+      print("CEP invalido, Tente Novamente")
+    else:
+      break
+  i = 0
+  for number in cep:
+    if i == 2 or i == 5:
+      print(number + '.',end = "")
+  i += 1
+  
 def cep():
+  print("")
   print("Agora, por favor confirme seu CEP")
   while True:
      try:
-       cep = input("")
-       if len(cep) < 8 or len(cep) > 8:
-        raise ValueError()
-       with open('usuarios.txt', 'a+') as arquivo:
-        arquivo.write(f"\n{cep}\n")
+       converter_cep(cep)
        break
      except ValueError:
        print("Não consigui Achar seu ddd, tente novamente")
@@ -113,7 +124,7 @@ def telefone():
   while True:
      try:
        ddd = int(input(""))
-       if ddd > 100:
+       if ddd <= 0 or ddd > 100:
         raise ValueError()
        with open('usuarios.txt', 'a+') as arquivo:
         arquivo.write(f"{ddd}")
@@ -124,21 +135,24 @@ def telefone():
   while True:
      try:
        telefone = int(input(""))
-       if telefone < 80000000 or telefone > 999999999:
+       if telefone < 90000000 or telefone > 999999999:
          raise ValueError()
        with open('usuarios.txt', 'a+') as arquivo:
         arquivo.write(f"{telefone}")
        break
      except ValueError:
        print("Não consigui Achar seu numero, tente novamente")
+
 def email():
+   print("")
    print("Agora Seu Email: ")
    while True:
     email1 = input("Exemplo: unimar@unimar.br ")
-    if email == "":
+    if email1 == None or email1 == "":
       print("Insira um Email")
     else:
       break
+
 def senha():
    print("""
 Seu cadastro está quase pronto, só falta criar uma senha para sua conta
@@ -150,7 +164,9 @@ Crie sua senha:
     senha = input("")
     if len(senha) < 8 or len(senha) > 8:
       print("sua senha deve ter pelo menos 8 Digitos")
+    else:
       break
+
 def final_cadastro(sexo,nome2,idade1,raca1,cpf1,endereço1,endereço_numero,cep1,ddd,email1):
    usuario = {"genero": sexo, "nome": nome2, "idade": idade1, "Raça": raca1, "cpf": cpf1, "endereço": endereço1, "numero": endereço_numero, "cep": cep1, "ddd": ddd, "telefone": telefone, "email": email1}
    print("Parabens você foi cadastrado")
@@ -168,6 +184,7 @@ def final_cadastro(sexo,nome2,idade1,raca1,cpf1,endereço1,endereço_numero,cep1
       print("Vamos Continuar? ")
     else:
       print("Não entendi, Está tudo certo?")
+
 def menu2():
   print("Coloque 0 caso seja a primeira escolha")
   print("Coloque 1 caso seja a segunda escolha")
@@ -240,10 +257,17 @@ def cadastro():
   print("")
   endereço()
   cep()
+  print("")
   print("Para manter-mos contato caso algo ocorra, escreva seu numero e seu Email")
+  print("")
   telefone()
   email()
   senha()
-  final_cadastro()
+  sexo = genero()
+  final_cadastro(sexo,"nome","idade1","raca1","cpf1","endereço1","endereço_numero","cep1","ddd","email1")
 
-  
+def valida_vazio(string):
+  if string == "" or string == None or string == " ":
+    return True
+  else:
+    return False
